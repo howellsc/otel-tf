@@ -26,7 +26,7 @@ resource "google_compute_firewall" "otel_fw" {
 
   allow {
     protocol = "tcp"
-    ports    = ["4317", "4318", "8889"]
+    ports    = ["4317", "4318", "8889", "8888"]
   }
 
   target_tags = ["otel-collector"]

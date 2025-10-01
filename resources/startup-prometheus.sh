@@ -21,7 +21,48 @@ cp prometheus-3.6.0.linux-amd64/promtool /usr/local/bin/
 chown prometheus:prometheus /usr/local/bin/prometheus
 chown prometheus:prometheus /usr/local/bin/promtool
 
-cp prometheus-3.6.0.linux-amd64/prometheus.yml /etc/prometheus/
+#cp prometheus-3.6.0.linux-amd64/prometheus.yml /etc/prometheus/
+
+cat /etc/prometheus/prometheus.yml <<EOF
+# my global config
+global:
+  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  - job_name: 'otel-collector'
+        scrape_interval: 10s
+        static_configs:
+        - targets: ['prometheus:8888']
+
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: "prometheus"
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    static_configs:
+      - targets: ["localhost:9090"]
+       # The label name is added as a label `label_name=<label_value>` to any timeseries scraped from this config.
+        labels:
+          app: "prometheus"
+EOF
+
 chown prometheus:prometheus /etc/prometheus/prometheus.yml
 
 cat > /etc/systemd/system/prometheus.service <<EOF
