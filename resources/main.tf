@@ -56,7 +56,7 @@ resource "google_compute_firewall" "prometheus_otel_collector" {
 
   allow {
     protocol = "tcp"
-    ports    = ["8888"]
+    ports    = ["8889"]
   }
 
   target_tags = ["prometheus"]
