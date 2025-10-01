@@ -34,6 +34,20 @@ resource "google_compute_firewall" "otel_fw" {
   source_ranges = ["0.0.0.0/0"]
 }
 
+resource "google_compute_firewall" "prometheus_http" {
+  name    = "prometheus_http"
+  network = google_compute_network.otel_net.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["9090"]
+  }
+
+  target_tags = ["prometheus"]
+
+  source_ranges = ["0.0.0.0/0"]
+}
+
 resource "google_compute_firewall" "otel_ssh" {
   name    = "otel-ssh"
   network = google_compute_network.otel_net.name
@@ -43,32 +57,34 @@ resource "google_compute_firewall" "otel_ssh" {
     ports    = ["22"]
   }
 
+  target_tags = ["ssh"]
+
   source_ranges = ["0.0.0.0/0"]
 }
 
 # Create the service account
-resource "google_service_account" "vm_otel_sa" {
+resource "google_service_account" "vm_sa" {
   project      = var.project_id
-  account_id   = "otel-vm-service-account"
-  display_name = "OTEL VM Service Account"
+  account_id   = "vm-service-account"
+  display_name = "VM Service Account"
 }
 
 resource "google_project_iam_member" "vm_sa_compute" {
   project = var.project_id
   role    = "roles/compute.viewer"
-  member  = "serviceAccount:${google_service_account.vm_otel_sa.email}"
+  member  = "serviceAccount:${google_service_account.vm_sa.email}"
 }
 
 resource "google_project_iam_member" "vm_sa_logging" {
   project = var.project_id
   role    = "roles/logging.logWriter"
-  member  = "serviceAccount:${google_service_account.vm_otel_sa.email}"
+  member  = "serviceAccount:${google_service_account.vm_sa.email}"
 }
 
 resource "google_project_iam_member" "vm_sa_monitoring" {
   project = var.project_id
   role    = "roles/monitoring.metricWriter"
-  member  = "serviceAccount:${google_service_account.vm_otel_sa.email}"
+  member  = "serviceAccount:${google_service_account.vm_sa.email}"
 }
 
 resource "google_compute_instance" "otel_collector" {
@@ -87,13 +103,38 @@ resource "google_compute_instance" "otel_collector" {
   }
 
   service_account {
-    email  = google_service_account.vm_otel_sa.email
+    email  = google_service_account.vm_sa.email
     scopes = ["https://www.googleapis.com/auth/cloud-platform"]
   }
 
-  metadata_startup_script = file("startup.sh")
+  metadata_startup_script = file("startup-otel-collector.sh")
 
-  tags = ["otel-collector"]
+  tags = ["otel-collector", "ssh"]
+}
+
+resource "google_compute_instance" "prometheus" {
+  name         = "prometheus"
+  machine_type = var.machine_type
+
+  boot_disk {
+    initialize_params {
+      image = "rocky-linux-cloud/rocky-linux-9"
+      size  = var.disk_size_gb
+    }
+  }
+
+  network_interface {
+    network = google_compute_network.otel_net.name
+  }
+
+  service_account {
+    email  = google_service_account.vm_sa.email
+    scopes = ["https://www.googleapis.com/auth/cloud-platform"]
+  }
+
+  metadata_startup_script = file("startup-prometheus.sh")
+
+  tags = ["prometheus", "ssh"]
 }
 
 # Cloud Router
