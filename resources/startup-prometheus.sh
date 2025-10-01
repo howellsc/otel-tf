@@ -13,7 +13,7 @@ chown prometheus:prometheus /var/lib/prometheus
 
 mkdir prometheus
 cd prometheus
-wget https://github.com/prometheus/prometheus/releases/download/v3.6.0/prometheus-3.6.0.linux-amd64.tar.gz
+wget -nv https://github.com/prometheus/prometheus/releases/download/v3.6.0/prometheus-3.6.0.linux-amd64.tar.gz
 tar -xvf prometheus-*.linux-amd64.tar.gz
 
 cp prometheus-3.6.0.linux-amd64/prometheus /usr/local/bin/
@@ -23,7 +23,7 @@ chown prometheus:prometheus /usr/local/bin/promtool
 
 #cp prometheus-3.6.0.linux-amd64/prometheus.yml /etc/prometheus/
 
-cat /etc/prometheus/prometheus.yml <<EOF
+cat > /etc/prometheus/prometheus.yml <<EOF
 # my global config
 global:
   scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
