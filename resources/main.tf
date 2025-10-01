@@ -29,6 +29,8 @@ resource "google_compute_firewall" "otel_fw" {
     ports    = ["4317", "4318", "8889"]
   }
 
+  target_tags = ["otel-collector"]
+
   source_ranges = ["0.0.0.0/0"]
 }
 
