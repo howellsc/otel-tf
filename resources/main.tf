@@ -35,7 +35,7 @@ resource "google_compute_firewall" "otel_fw" {
 }
 
 resource "google_compute_firewall" "prometheus_http" {
-  name    = "prometheus_http"
+  name    = "prometheus-http"
   network = google_compute_network.otel_net.name
 
   allow {
