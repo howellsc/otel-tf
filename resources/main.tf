@@ -45,7 +45,6 @@ resource "google_compute_instance" "otel_collector" {
 
   network_interface {
     network = google_compute_network.otel_net.name
-    access_config {} # give external IP
   }
 
   metadata_startup_script = file("startup.sh")
