@@ -48,6 +48,22 @@ resource "google_compute_firewall" "prometheus_http" {
   source_ranges = ["0.0.0.0/0"]
 }
 
+resource "google_compute_firewall" "prometheus_otel_collector" {
+  name    = "prometheus-otel-collector"
+  network = google_compute_network.otel_net.name
+
+  direction = "EGRESS"
+
+  allow {
+    protocol = "tcp"
+    ports    = ["8888"]
+  }
+
+  target_tags = ["prometheus"]
+
+  source_ranges = ["0.0.0.0/0"]
+}
+
 resource "google_compute_firewall" "otel_ssh" {
   name    = "otel-ssh"
   network = google_compute_network.otel_net.name
