@@ -44,6 +44,31 @@ resource "google_compute_firewall" "otel_ssh" {
   source_ranges = ["0.0.0.0/0"]
 }
 
+# Create the service account
+resource "google_service_account" "vm_otel_sa" {
+  project      = var.project_id
+  account_id   = "otel-vm-service-account"
+  display_name = "OTEL VM Service Account"
+}
+
+resource "google_project_iam_member" "vm_sa_compute" {
+  project = var.project_id
+  role    = "roles/compute.viewer"
+  member  = "serviceAccount:${google_service_account.vm_otel_sa.email}"
+}
+
+resource "google_project_iam_member" "vm_sa_logging" {
+  project = var.project_id
+  role    = "roles/logging.logWriter"
+  member  = "serviceAccount:${google_service_account.vm_otel_sa.email}"
+}
+
+resource "google_project_iam_member" "vm_sa_monitoring" {
+  project = var.project_id
+  role    = "roles/monitoring.metricWriter"
+  member  = "serviceAccount:${google_service_account.vm_otel_sa.email}"
+}
+
 resource "google_compute_instance" "otel_collector" {
   name         = "otel-collector"
   machine_type = var.machine_type
@@ -57,6 +82,11 @@ resource "google_compute_instance" "otel_collector" {
 
   network_interface {
     network = google_compute_network.otel_net.name
+  }
+
+  service_account {
+    email  = google_service_account.vm_otel_sa.email
+    scopes = ["https://www.googleapis.com/auth/cloud-platform"]
   }
 
   metadata_startup_script = file("startup.sh")
