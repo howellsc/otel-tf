@@ -61,8 +61,8 @@ resource "google_compute_firewall" "prometheus_http" {
   source_ranges = ["0.0.0.0/0"]
 }
 
-resource "google_compute_firewall" "otel_collector_prometheus" {
-  name    = "otel-collector-prometheus"
+resource "google_compute_firewall" "otel_collector_grafana" {
+  name    = "otel-collector-grafana"
   network = google_compute_network.otel_net.name
 
   direction = "EGRESS"
@@ -129,7 +129,7 @@ resource "google_compute_firewall" "grafana_http" {
 
   allow {
     protocol = "tcp"
-    ports    = ["3000"]
+    ports    = ["3000", "9090"]
   }
 
   target_tags = ["grafana"]
