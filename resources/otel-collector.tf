@@ -1,5 +1,7 @@
 resource "google_compute_instance" "otel_collector" {
-  name         = "otel-collector"
+  count = 2
+
+  name         = "otel-collector-${count.index}"
   machine_type = var.machine_type
 
   boot_disk {
