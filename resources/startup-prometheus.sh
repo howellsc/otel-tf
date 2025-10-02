@@ -75,7 +75,9 @@ After=network-online.target
 Type=simple
 ExecStart=/usr/local/bin/prometheus \
   --config.file /etc/prometheus/prometheus.yml \
-  --storage.tsdb.path /var/lib/prometheus/
+  --storage.tsdb.path /var/lib/prometheus/ \
+  --web.enable-remote-write-receiver
+
 Restart=on-failure
 User=prometheus
 Group=prometheus

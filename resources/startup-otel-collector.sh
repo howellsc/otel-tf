@@ -64,7 +64,6 @@ exporters:
   prometheusremotewrite:
     endpoint: http://prometheus:9090/api/v1/write
 
-
 service:
 
   pipelines:
@@ -77,7 +76,7 @@ service:
     metrics:
       receivers: [otlp, prometheus]
       processors: [batch]
-      exporters: [prometheus]
+      exporters: [prometheusremotewrite]
 
     logs:
       receivers: [otlp]
