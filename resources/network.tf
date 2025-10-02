@@ -106,3 +106,17 @@ resource "google_compute_firewall" "otel_spring_boot_http" {
 
   source_ranges = ["0.0.0.0/0"]
 }
+
+resource "google_compute_firewall" "grafana_http" {
+  name    = "prometheus-http"
+  network = google_compute_network.otel_net.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["3000"]
+  }
+
+  target_tags = ["grafana"]
+
+  source_ranges = ["0.0.0.0/0"]
+}
