@@ -108,7 +108,7 @@ resource "google_compute_firewall" "otel_spring_boot_http" {
 }
 
 resource "google_compute_firewall" "grafana_http" {
-  name    = "prometheus-http"
+  name    = "grafana-http"
   network = google_compute_network.otel_net.name
 
   allow {
