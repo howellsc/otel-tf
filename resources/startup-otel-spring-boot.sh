@@ -12,9 +12,11 @@ REGISTRY="europe-north1-docker.pkg.dev"
 IMAGE="ritm4225265/spring/otel-spring-boot"
 
 # Get access token from gcloud
-TOKEN=$(gcloud auth print-access-token)
+ACCESS_TOKEN=$(curl -s -H "Metadata-Flavor: Google" \
+  "http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token" \
+  | jq -r '.access_token')
 
-podman login -u oauth2accesstoken -p "$TOKEN" https://$REGISTRY
+podman login -u oauth2accesstoken -p "$ACCESS_TOKEN" https://$REGISTRY
 
 # Stop and remove the container if it exists
 podman stop $CONTAINER_NAME || true

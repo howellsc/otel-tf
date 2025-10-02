@@ -22,3 +22,9 @@ resource "google_project_iam_member" "vm_sa_monitoring" {
   role    = "roles/monitoring.metricWriter"
   member  = "serviceAccount:${google_service_account.vm_sa.email}"
 }
+
+resource "google_project_iam_member" "vm_sa_artifact_reader" {
+  project = var.project_id
+  role    = "roles/artifactregistry.reader"
+  member  = "serviceAccount:${google_service_account.vm_sa.email}"
+}
