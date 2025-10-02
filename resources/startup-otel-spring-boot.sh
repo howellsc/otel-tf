@@ -1,7 +1,7 @@
 #!/bin/bash
 
 apt-get update
-apt-get install -y docker.io docker-credential-gcr
+apt-get install -y docker.io curl tar
 
 systemctl start docker
 
@@ -14,6 +14,14 @@ export HOME=/home/appuser
 mkdir -p $HOME
 
 # Configure docker with credentials for gcr.io and pkg.dev
+VERSION=2.1.29
+OS=linux  # or "darwin" for OSX, "windows" for Windows.
+ARCH=amd64  # or "386" for 32-bit OSs
+
+curl -fsSL "https://github.com/GoogleCloudPlatform/docker-credential-gcr/releases/download/v${VERSION}/docker-credential-gcr_${OS}_${ARCH}-${VERSION}.tar.gz" \
+| tar xz docker-credential-gcr \
+&& chmod +x docker-credential-gcr && sudo mv docker-credential-gcr /usr/bin/
+
 docker-credential-gcr configure-docker
 
 # Stop and remove the container if it exists
