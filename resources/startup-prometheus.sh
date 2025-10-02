@@ -46,9 +46,9 @@ rule_files:
 # Here it's Prometheus itself.
 scrape_configs:
   - job_name: 'otel-collector'
-        scrape_interval: 10s
-        static_configs:
-        - targets: ['otel-collector:8889']
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['otel-collector:8889']
 
   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
   - job_name: "prometheus"

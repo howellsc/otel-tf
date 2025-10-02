@@ -26,4 +26,4 @@ podman rm $CONTAINER_NAME || true
 podman pull $REGISTRY/$IMAGE
 
 # Run docker container
-podman run -d --network=host --name $CONTAINER_NAME -p 5000:5000 $IMAGE
+podman run -d --network=host --name $CONTAINER_NAME $IMAGE
