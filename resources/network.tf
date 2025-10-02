@@ -61,8 +61,8 @@ resource "google_compute_firewall" "prometheus_http" {
   source_ranges = ["0.0.0.0/0"]
 }
 
-resource "google_compute_firewall" "otel_collector_grafana" {
-  name    = "otel-collector-grafana"
+resource "google_compute_firewall" "otel_collector_prometheus" {
+  name    = "otel-collector-prometheus"
   network = google_compute_network.otel_net.name
 
   direction = "EGRESS"
