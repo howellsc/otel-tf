@@ -61,6 +61,10 @@ exporters:
     endpoint: 0.0.0.0:8889
     namespace: default
 
+  prometheusremotewrite:
+    endpoint: http://prometheus:9090/api/v1/write
+
+
 service:
 
   pipelines:
