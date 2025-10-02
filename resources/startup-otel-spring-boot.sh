@@ -1,7 +1,8 @@
 #!/bin/bash
 
 apt-get update
-apt-get install -y docker.io
+apt-get install -y docker.io docker-credential-gcr
+
 systemctl start docker
 
 # A name for the container and image
