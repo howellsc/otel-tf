@@ -4,7 +4,7 @@ set -e
 # Update OS
 dnf update -y
 
-yum -y install podman
+dnf install podman -y
 
 # A name for the container and image
 CONTAINER_NAME="spring-boot-otel"

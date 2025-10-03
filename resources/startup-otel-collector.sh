@@ -4,8 +4,8 @@ set -e
 # Update OS
 dnf update -y
 
-yum -y install wget
-wget https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v0.136.0/otelcol_0.136.0_linux_amd64.rpm
+dnf install wget -y
+wget -nv https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v0.136.0/otelcol_0.136.0_linux_amd64.rpm
 rpm -ivh otelcol_0.136.0_linux_amd64.rpm
 
 cat > /etc/otelcol/config.yaml <<EOF
@@ -53,15 +53,6 @@ receivers:
 processors:
   batch:
 
-  attributes/map_service_name_to_job:
-      actions:
-        - key: service.name
-          new_key: job
-          action: insert
-        - key: service.name
-          new_key: application
-          action: insert
-
 exporters:
   debug:
     verbosity: detailed
@@ -84,7 +75,7 @@ service:
 
     metrics:
       receivers: [otlp, prometheus]
-      processors: [batch,attributes/map_service_name_to_job]
+      processors: [batch]
       exporters: [prometheusremotewrite]
 
     logs:
