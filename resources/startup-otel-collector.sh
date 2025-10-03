@@ -53,6 +53,15 @@ receivers:
 processors:
   batch:
 
+  attributes/map_service_name_to_job:
+      actions:
+        - key: service.name
+          new_key: job
+          action: insert
+        - key: service.name
+          new_key: application
+          action: insert
+
 exporters:
   debug:
     verbosity: detailed
@@ -75,7 +84,7 @@ service:
 
     metrics:
       receivers: [otlp, prometheus]
-      processors: [batch]
+      processors: [batch,attributes/map_service_name_to_job]
       exporters: [prometheusremotewrite]
 
     logs:
