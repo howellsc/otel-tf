@@ -1,5 +1,5 @@
 resource "google_compute_instance" "otel_collector" {
-  count = 2
+  count = 1
 
   name         = "otel-collector-${count.index}"
   machine_type = var.machine_type
