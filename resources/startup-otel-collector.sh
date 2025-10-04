@@ -20,6 +20,7 @@ extensions:
     endpoint: 0.0.0.0:55679
 
 receivers:
+
   otlp:
     protocols:
       grpc:
@@ -27,14 +28,18 @@ receivers:
       http:
         endpoint: 0.0.0.0:4318
 
-  # Collect own metrics
+  # Collect own metrics and Grafana
   prometheus:
     config:
       scrape_configs:
       - job_name: 'otel-collector'
         scrape_interval: 10s
         static_configs:
-        - targets: ['0.0.0.0:8888']
+          - targets: ['0.0.0.0:8888']
+      - job_name: 'grafana'
+        static_configs:
+          - targets: ['grafana:3000']
+        metrics_path: /metrics
 
   jaeger:
     protocols:
