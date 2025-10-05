@@ -153,6 +153,22 @@ resource "google_compute_firewall" "grafana_http" {
   source_ranges = ["0.0.0.0/0"]
 }
 
+resource "google_compute_firewall" "grafana_tempo" {
+  name    = "grafana-tempo"
+  network = google_compute_network.otel_net.name
+
+  direction = "EGRESS"
+
+  allow {
+    protocol = "tcp"
+    ports    = ["3200"]
+  }
+
+  target_tags = ["grafana"]
+
+  source_ranges = ["0.0.0.0/0"]
+}
+
 resource "google_compute_firewall" "tempo" {
   name    = "tempo"
   network = google_compute_network.otel_net.name
