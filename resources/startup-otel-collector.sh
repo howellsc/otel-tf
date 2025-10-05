@@ -41,19 +41,19 @@ receivers:
           - targets: ['grafana:3000']
         metrics_path: /metrics
 
-  jaeger:
-    protocols:
-      grpc:
-        endpoint: 0.0.0.0:14250
-      thrift_binary:
-        endpoint: 0.0.0.0:6832
-      thrift_compact:
-        endpoint: 0.0.0.0:6831
-      thrift_http:
-        endpoint: 0.0.0.0:14268
-
-  zipkin:
-    endpoint: 0.0.0.0:9411
+#  jaeger:
+#    protocols:
+#      grpc:
+#        endpoint: 0.0.0.0:14250
+#      thrift_binary:
+#        endpoint: 0.0.0.0:6832
+#      thrift_compact:
+#        endpoint: 0.0.0.0:6831
+#      thrift_http:
+#        endpoint: 0.0.0.0:14268
+#
+#  zipkin:
+#    endpoint: 0.0.0.0:9411
 
 processors:
   batch:
@@ -69,14 +69,19 @@ exporters:
   prometheusremotewrite:
     endpoint: http://prometheus:9090/api/v1/write
 
+  otlp:
+    endpoint: "tempo:4317"  # Tempo OTLP gRPC endpoint
+    tls:
+      insecure: true  # Use insecure if Tempo does not use TLS
+
 service:
 
   pipelines:
 
     traces:
-      receivers: [otlp, jaeger, zipkin]
+      receivers: [otlp]
       processors: [batch]
-      exporters: [debug]
+      exporters: [otlp]
 
     metrics:
       receivers: [otlp, prometheus]
