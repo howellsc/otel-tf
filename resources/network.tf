@@ -177,7 +177,7 @@ resource "google_compute_firewall" "tempo" {
 
   allow {
     protocol = "tcp"
-    ports    = ["4318", "4317"]
+    ports    = ["4318", "4317", "3200"]
   }
 
   target_tags = ["tempo"]
