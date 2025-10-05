@@ -137,7 +137,7 @@ resource "google_compute_firewall" "grafana_http" {
   source_ranges = ["0.0.0.0/0"]
 }
 
-esource "google_compute_firewall" "tempo" {
+resource "google_compute_firewall" "tempo" {
   name    = "tempo"
   network = google_compute_network.otel_net.name
 
