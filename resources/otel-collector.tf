@@ -6,7 +6,7 @@ resource "google_compute_instance" "otel_collector" {
 
   boot_disk {
     initialize_params {
-      image = "rocky-linux-cloud/rocky-linux-9"
+      image = var.machine_image
       size  = var.disk_size_gb
     }
   }

@@ -5,7 +5,7 @@ resource "google_compute_instance" "ubuntu_vm" {
 
   boot_disk {
     initialize_params {
-      image = "rocky-linux-cloud/rocky-linux-9"
+      image = var.machine_image
       size  = var.disk_size_gb
     }
   }
