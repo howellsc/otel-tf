@@ -35,10 +35,6 @@ metrics_generator:
     - url: http://prometheus:9090/api/v1/write
       send_exemplars: true
 
-metrics:
-  prometheus:
-    listen_address: 0.0.0.0:3100
-
 storage:
   trace:
     backend: local
