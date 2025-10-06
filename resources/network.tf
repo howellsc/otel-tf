@@ -109,6 +109,22 @@ resource "google_compute_firewall" "prometheus_otel_collector" {
   source_ranges = ["0.0.0.0/0"]
 }
 
+resource "google_compute_firewall" "prometheus_tempo" {
+  name    = "prometheus-tempo"
+  network = google_compute_network.otel_net.name
+
+  direction = "EGRESS"
+
+  allow {
+    protocol = "tcp"
+    ports    = ["3100"]
+  }
+
+  target_tags = ["prometheus"]
+
+  source_ranges = ["0.0.0.0/0"]
+}
+
 resource "google_compute_firewall" "otel_spring_boot_otel_collector" {
   name    = "otel-spring-boot-otel-collector"
   network = google_compute_network.otel_net.name
@@ -177,7 +193,7 @@ resource "google_compute_firewall" "tempo" {
 
   allow {
     protocol = "tcp"
-    ports    = ["4318", "4317", "3200"]
+    ports    = ["4318", "4317", "3200", "3100"]
   }
 
   target_tags = ["tempo"]

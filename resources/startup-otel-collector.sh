@@ -40,6 +40,10 @@ receivers:
         static_configs:
           - targets: ['grafana:3000']
         metrics_path: /metrics
+      - job_name: 'tempo'
+        static_configs:
+          - targets: ['tempo:3100']
+        metrics_path: /metrics
 
 #  jaeger:
 #    protocols:
