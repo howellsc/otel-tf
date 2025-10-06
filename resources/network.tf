@@ -177,7 +177,7 @@ resource "google_compute_firewall" "grafana_tempo" {
 
   allow {
     protocol = "tcp"
-    ports    = ["3200"]
+    ports    = ["3100"]
   }
 
   target_tags = ["grafana"]
