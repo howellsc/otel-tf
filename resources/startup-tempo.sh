@@ -9,7 +9,7 @@ dnf install tempo_2.8.2_linux_amd64.rpm -y
 
 cat > /etc/tempo/config.yml <<EOF
 server:
-  http_listen_port: 3200
+  http_listen_port: 3100
 
 distributor:
   receivers:
@@ -32,8 +32,12 @@ metrics_generator:
   storage:
     path: /var/tempo/generator/wal
     remote_write:
-    - url: http://localhost:9090/api/v1/write
+    - url: http://prometheus:9090/api/v1/write
       send_exemplars: true
+
+metrics:
+  prometheus:
+    listen_address: 0.0.0.0:3100
 
 storage:
   trace:
@@ -46,7 +50,7 @@ storage:
 overrides:
   defaults:
     metrics_generator:
-      processors: [service-graphs, span-metrics]
+      processors: [service-graphs, span-metrics,local-blocks]
 EOF
 
 mkdir -p /var/lib/tempo/{traces,wal}
