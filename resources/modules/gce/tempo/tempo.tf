@@ -19,7 +19,7 @@ resource "google_compute_instance" "tempo" {
     scopes = ["https://www.googleapis.com/auth/cloud-platform"]
   }
 
-  metadata_startup_script = file("startup-tempo.sh")
+  metadata_startup_script = file("${path.module}/startup-tempo.sh")
 
   tags = ["tempo", "ssh"]
 }

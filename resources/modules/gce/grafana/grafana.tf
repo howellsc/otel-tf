@@ -19,7 +19,7 @@ resource "google_compute_instance" "grafana" {
     scopes = ["https://www.googleapis.com/auth/cloud-platform"]
   }
 
-  metadata_startup_script = file("startup-grafana.sh")
+  metadata_startup_script = file("${path.module}/startup-grafana.sh")
 
   tags = ["grafana", "ssh"]
 }
