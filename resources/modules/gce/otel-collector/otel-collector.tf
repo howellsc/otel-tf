@@ -68,7 +68,7 @@ resource "google_compute_region_backend_service" "otel_collector_backend_service
   name     = "otel-collector"
   protocol = "HTTP"
 
-  load_balancing_scheme = "EXTERNAL_MANAGED"
+  load_balancing_scheme = "INTERNAL_MANAGED"
 
   backend {
     balancing_mode  = "UTILIZATION"
