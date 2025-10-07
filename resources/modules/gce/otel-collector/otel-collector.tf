@@ -33,7 +33,7 @@ resource "google_compute_instance_template" "otel_collector_template" {
 }
 
 resource "google_compute_region_instance_group_manager" "otel_collector_mig" {
-  name = "otel_collector_mig"
+  name = "otel-collector-mig"
 
   region             = var.region
   base_instance_name = "otel-collector"
