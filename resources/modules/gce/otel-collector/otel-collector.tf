@@ -47,6 +47,11 @@ resource "google_compute_region_instance_group_manager" "otel_collector_mig" {
     port = 4318
   }
 
+  named_port {
+    name = "health_check"
+    port = 13133
+  }
+
   auto_healing_policies {
     health_check      = google_compute_region_health_check.otel_collector_health_check.id
     initial_delay_sec = 600
@@ -90,7 +95,7 @@ resource "google_compute_region_health_check" "otel_collector_health_check" {
   region              = var.region
 
   http_health_check {
-    port_name    = "http"
-    request_path = "/healthz"
+    port_name    = "health_check"
+    request_path = "/"
   }
 }
