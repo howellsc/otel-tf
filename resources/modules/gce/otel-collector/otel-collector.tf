@@ -36,7 +36,7 @@ resource "google_compute_region_instance_group_manager" "otel_collector_mig" {
   name = "otel_collector-mig"
 
   region             = var.region
-  base_instance_name = "otel_collector"
+  base_instance_name = "otel-collector"
   version {
     instance_template = google_compute_instance_template.otel_collector_template.id
   }
