@@ -155,3 +155,25 @@ resource "google_compute_address" "otel_collector_ip" {
   network_tier = "PREMIUM"
   address_type = "INTERNAL" # <--- Crucial: Ensure it is an internal IP
 }
+
+resource "google_dns_managed_zone" "otel_collector_dns_managed_zone" {
+  name        = "otel-collector-zone"
+  dns_name    = "natwestmarkets.internal."
+  visibility  = "private"
+
+  private_visibility_config {
+    networks {
+      network_url = var.vpc_id
+    }
+  }
+}
+
+resource "google_dns_record_set" "ilb_dns" {
+  name         = "otel-collector.natwestmarkets.internal."  # Must end with a dot
+  type         = "A"
+  ttl          = 300
+  managed_zone = google_dns_managed_zone.otel_collector_dns_managed_zone.name
+
+  rrdatas = [google_compute_address.otel_collector_ip.address]  # Internal IP of the ILB
+}
+
