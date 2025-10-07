@@ -5,8 +5,8 @@ resource "google_compute_instance_template" "otel_collector_template" {
   region       = var.region
 
   disk {
-    image = var.machine_image
-    size  = var.disk_size_gb
+    source_image = var.machine_image
+    disk_size_gb = var.disk_size_gb
   }
 
   network_interface {
@@ -27,7 +27,7 @@ resource "google_compute_instance_template" "otel_collector_template" {
     scopes = ["https://www.googleapis.com/auth/cloud-platform"]
   }
 
-  metadata_startup_script = file("startup-otel-collector.sh")
+  metadata_startup_script = file("${path.module}/startup-otel-collector.sh")
 
   tags = ["otel-collector", "ssh"]
 }
