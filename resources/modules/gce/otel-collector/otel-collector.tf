@@ -95,8 +95,9 @@ resource "google_compute_region_health_check" "otel_collector_health_check" {
   region              = var.region
 
   http_health_check {
-    port_name    = "health-check"
-    port_specification = "USE_NAMED_PORT"
+    port = 13133
+    # port_name    = "health-check"
+    # port_specification = "USE_NAMED_PORT"
     request_path = "/"
   }
 }
