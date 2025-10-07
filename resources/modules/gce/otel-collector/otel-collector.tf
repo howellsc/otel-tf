@@ -131,10 +131,10 @@ resource "google_compute_region_target_http_proxy" "otel_collector_proxy" {
   region  = var.region
 }
 
-resource "google_compute_forwarding_rule" "nginx_forwarding_rule" {
+resource "google_compute_forwarding_rule" "otel_collector_forwarding_rule" {
   name                  = "otel-collector-http-forwarding-rule"
   load_balancing_scheme = "INTERNAL_MANAGED"
-  port_range            = "4318"
+  port_range            = "80"
   target                = google_compute_region_target_http_proxy.otel_collector_proxy.self_link
   network               = var.vpc_id
   subnetwork            = var.vpc_subnet_id
