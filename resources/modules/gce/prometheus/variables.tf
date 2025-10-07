@@ -18,8 +18,8 @@ variable "machine_image" {
   type = string
 }
 
-variable "vpc_id" {
-  description = "VPC the GCE image is to use"
+variable "vpc_subnet_id" {
+  description = "VPC Subnet the GCE image is to use"
   type = string
 }
 

@@ -11,7 +11,7 @@ resource "google_compute_instance" "ubuntu_vm" {
   }
 
   network_interface {
-    network = var.vpc_id
+    subnetwork = var.vpc_subnet_id
   }
 
   service_account {

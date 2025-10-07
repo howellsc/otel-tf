@@ -23,6 +23,11 @@ variable "vpc_id" {
   type = string
 }
 
+variable "vpc_subnet_id" {
+  description = "VPC Subnet the GCE image is to use"
+  type = string
+}
+
 variable "vm_sa_email" {
   description = "SA Email for the GCE"
   type        = string

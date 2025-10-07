@@ -1,6 +1,21 @@
 resource "google_compute_network" "otel_net" {
   name                    = "otel-network"
-  auto_create_subnetworks = true
+  auto_create_subnetworks = false
+}
+
+resource "google_compute_subnetwork" "otel_subnet" {
+  name          = "otel-subnet"
+  region        = var.region
+  ip_cidr_range = "10.132.0.0/20"
+
+  private_ip_google_access = true
+
+  network = google_compute_network.otel_net.id
+
+  lifecycle {
+    create_before_destroy = false
+    replace_triggered_by  = [google_compute_network.otel_net]
+  }
 }
 
 # Cloud Router

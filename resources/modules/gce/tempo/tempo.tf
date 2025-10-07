@@ -11,7 +11,7 @@ resource "google_compute_instance" "tempo" {
   }
 
   network_interface {
-    network = var.vpc_id
+    subnetwork = var.vpc_subnet_id
   }
 
   service_account {

@@ -10,7 +10,7 @@ resource "google_compute_instance_template" "otel_collector_template" {
   }
 
   network_interface {
-    network = var.vpc_id
+    subnetwork = var.vpc_subnet_id
   }
 
   shielded_instance_config {
@@ -78,7 +78,7 @@ resource "google_compute_region_backend_service" "otel_collector_backend_service
 
   health_checks = [google_compute_region_health_check.otel_collector_health_check.id]
 
-  port_name = "http" # Refer to the named port in the MIG (usually "http" or "https")
+  port_name = "health-check" # Refer to the named port in the MIG (usually "http" or "https")
 
   depends_on = [
     google_compute_region_instance_group_manager.otel_collector_mig,
@@ -98,4 +98,50 @@ resource "google_compute_region_health_check" "otel_collector_health_check" {
     port_name    = "health-check"
     request_path = "/"
   }
+}
+
+resource "google_compute_subnetwork" "otel_collector_proxy_only" {
+  name          = "otel-collector-proxy-subnet"
+  ip_cidr_range = "10.129.0.0/23" # must be in your VPC range
+  region        = var.region
+  network       = var.vpc_id
+  purpose       = "REGIONAL_MANAGED_PROXY"
+  role          = "ACTIVE"
+}
+
+resource "google_compute_region_url_map" "otel_collector_url_map" {
+  name            = "otel-collector-url-map"
+  default_service = google_compute_region_backend_service.otel_collector_backend_service.self_link
+  region          = var.region
+
+  host_rule {
+    hosts        = ["*"]
+    path_matcher = "all-paths"
+  }
+
+  path_matcher {
+    name            = "all-paths"
+    default_service = google_compute_region_backend_service.otel_collector_backend_service.self_link
+  }
+}
+
+resource "google_compute_region_target_http_proxy" "otel_collector_proxy" {
+  name    = "otel-collector-http-proxy"
+  url_map = google_compute_region_url_map.otel_collector_url_map.self_link
+  region  = var.region
+}
+
+resource "google_compute_forwarding_rule" "nginx_forwarding_rule" {
+  name                  = "otel-collector-http-forwarding-rule"
+  load_balancing_scheme = "INTERNAL_MANAGED"
+  port_range            = "4318"
+  target                = google_compute_region_target_http_proxy.otel_collector_proxy.self_link
+  network               = var.vpc_id
+  subnetwork            = var.vpc_subnet_id
+  ip_protocol           = "TCP"
+  region                = var.region
+
+  depends_on = [
+    google_compute_subnetwork.otel_collector_proxy_only
+  ]
 }

@@ -81,5 +81,6 @@ module "otel_collector_gce" {
   machine_type  = var.machine_type
   disk_size_gb  = var.disk_size_gb
   vpc_id        = module.vcp.vpc_id
+  vpc_subnet_id = module.vcp.vpc_subnet
   vm_sa_email   = module.sa.vm_sa_email
 }
