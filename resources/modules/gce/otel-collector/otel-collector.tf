@@ -140,8 +140,17 @@ resource "google_compute_forwarding_rule" "otel_collector_forwarding_rule" {
   subnetwork            = var.vpc_subnet_id
   ip_protocol           = "TCP"
   region                = var.region
+  ip_address = google_compute_address.otel_collector_ip.self_link
 
   depends_on = [
     google_compute_subnetwork.otel_collector_proxy_only
   ]
+}
+
+resource "google_compute_address" "otel_collector_ip" {
+  name         = "otel-collector-internal-ip"
+  subnetwork   = var.vpc_subnet_id # The subnetwork where clients will connect
+  region       = var.region
+  network_tier = "PREMIUM"
+  address_type = "INTERNAL" # <--- Crucial: Ensure it is an internal IP
 }
