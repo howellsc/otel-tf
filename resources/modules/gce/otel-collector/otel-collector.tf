@@ -47,10 +47,10 @@ resource "google_compute_region_instance_group_manager" "otel_collector_mig" {
     port = 4318
   }
 
-  named_port {
-    name = "health-check"
-    port = 13133
-  }
+  # named_port {
+  #   name = "health-check"
+  #   port = 13133
+  # }
 
   auto_healing_policies {
     health_check      = google_compute_region_health_check.otel_collector_health_check.id
@@ -95,8 +95,9 @@ resource "google_compute_region_health_check" "otel_collector_health_check" {
   region              = var.region
 
   http_health_check {
-    port_name    = "health-check"
-    port_specification = "USE_NAMED_PORT"
+    # port_name    = "health-check"
+    # port_specification = "USE_NAMED_PORT"
+    port         = 13133
     request_path = "/"
   }
 }
@@ -157,9 +158,9 @@ resource "google_compute_address" "otel_collector_ip" {
 }
 
 resource "google_dns_managed_zone" "otel_collector_dns_managed_zone" {
-  name        = "otel-collector-zone"
-  dns_name    = "natwestmarkets.internal."
-  visibility  = "private"
+  name       = "otel-collector-zone"
+  dns_name   = "natwestmarkets.internal."
+  visibility = "private"
 
   private_visibility_config {
     networks {
@@ -169,11 +170,11 @@ resource "google_dns_managed_zone" "otel_collector_dns_managed_zone" {
 }
 
 resource "google_dns_record_set" "ilb_dns" {
-  name         = "otel-collector.natwestmarkets.internal."  # Must end with a dot
+  name         = "otel-collector.natwestmarkets.internal." # Must end with a dot
   type         = "A"
   ttl          = 300
   managed_zone = google_dns_managed_zone.otel_collector_dns_managed_zone.name
 
-  rrdatas = [google_compute_address.otel_collector_ip.address]  # Internal IP of the ILB
+  rrdatas = [google_compute_address.otel_collector_ip.address] # Internal IP of the ILB
 }
 
