@@ -48,7 +48,7 @@ resource "google_compute_region_instance_group_manager" "otel_collector_mig" {
   }
 
   named_port {
-    name = "health_check"
+    name = "health-check"
     port = 13133
   }
 
@@ -95,7 +95,7 @@ resource "google_compute_region_health_check" "otel_collector_health_check" {
   region              = var.region
 
   http_health_check {
-    port_name    = "health_check"
+    port_name    = "health-check"
     request_path = "/"
   }
 }
