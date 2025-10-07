@@ -1,5 +1,5 @@
-resource "google_compute_instance" "ubuntu_vm" {
-  name         = "otel-spring-boot"
+resource "google_compute_instance" "grafana" {
+  name         = "grafana"
   machine_type = var.machine_type
   zone         = var.zone
 
@@ -11,15 +11,15 @@ resource "google_compute_instance" "ubuntu_vm" {
   }
 
   network_interface {
-    network = google_compute_network.otel_net.name
+    network = var.vpc_id
   }
 
   service_account {
-    email  = google_service_account.vm_sa.email
+    email  = var.vm_sa_email
     scopes = ["https://www.googleapis.com/auth/cloud-platform"]
   }
 
-  metadata_startup_script = file("startup-otel-spring-boot.sh")
+  metadata_startup_script = file("startup-grafana.sh")
 
-  tags = ["otel-spring-boot", "ssh"]
+  tags = ["grafana", "ssh"]
 }

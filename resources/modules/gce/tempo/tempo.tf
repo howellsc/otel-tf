@@ -1,6 +1,7 @@
 resource "google_compute_instance" "tempo" {
   name         = "tempo"
   machine_type = var.machine_type
+  zone         = var.zone
 
   boot_disk {
     initialize_params {
@@ -10,11 +11,11 @@ resource "google_compute_instance" "tempo" {
   }
 
   network_interface {
-    network = google_compute_network.otel_net.name
+    network = var.vpc_id
   }
 
   service_account {
-    email  = google_service_account.vm_sa.email
+    email  = var.vm_sa_email
     scopes = ["https://www.googleapis.com/auth/cloud-platform"]
   }
 
