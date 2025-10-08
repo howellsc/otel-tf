@@ -64,17 +64,17 @@ receivers:
     config:
       scrape_configs:
       - job_name: 'otel-collector'
-          scrape_interval: 10s
-          static_configs:
-            - targets: ['0.0.0.0:8888']
-        - job_name: 'tempo'
-          static_configs:
-            - targets: ['localhost:3100']
-          metrics_path: /metrics
+        scrape_interval: 10s
+        static_configs:
+          - targets: ['0.0.0.0:8888']
+      - job_name: 'tempo'
+        static_configs:
+          - targets: ['localhost:3100']
+        metrics_path: /metrics
 
 exporters:
-  otlp:
-    endpoint: otel-collector.natwestmarkets.internal:4318
+  otlphttp:
+    endpoint: "http://otel-collector.natwestmarkets.internal:4318"
     tls:
       insecure: true
 
@@ -86,7 +86,7 @@ service:
     metrics:
       receivers: [prometheus]
       processors: [batch]
-      exporters: [otlp]
+      exporters: [otlphttp]
 
 EOF
 

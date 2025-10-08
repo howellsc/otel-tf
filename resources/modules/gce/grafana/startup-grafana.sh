@@ -29,16 +29,16 @@ receivers:
     config:
       scrape_configs:
       - job_name: 'otel-collector'
-          scrape_interval: 10s
-          static_configs:
-            - targets: ['0.0.0.0:8888']
-        - job_name: 'grafana'
-          static_configs:
-            - targets: ['localhost:3000']
+        scrape_interval: 10s
+        static_configs:
+          - targets: ['0.0.0.0:8888']
+      - job_name: 'grafana'
+        static_configs:
+          - targets: ['localhost:3000']
 
 exporters:
-  otlp:
-    endpoint: otel-collector.natwestmarkets.internal:4318
+  otlphttp:
+    endpoint: "http://otel-collector.natwestmarkets.internal:4318"
     tls:
       insecure: true
 
@@ -50,7 +50,7 @@ service:
     metrics:
       receivers: [prometheus]
       processors: [batch]
-      exporters: [otlp]
+      exporters: [otlphttp]
 
 EOF
 
