@@ -57,7 +57,7 @@ service tempo restart
 wget -nv https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v0.136.0/otelcolotelcol-contrib_0.136.0_linux_amd64.rpm
 rpm -ivh otelcol-contrib_0.136.0_linux_amd64.rpm
 
-cat > /etc/otelcol/config.yaml <<EOF
+cat > /etc/otelcol-contrib/config.yaml <<EOF
 receivers:
   prometheus:
     config:

@@ -8,7 +8,7 @@ dnf install wget -y
 wget -nv https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v0.136.0/otelcol-contrib_0.136.0_linux_amd64.rpm
 rpm -ivh otelcol-contrib_0.136.0_linux_amd64.rpm
 
-cat > /etc/otelcol/config.yaml <<EOF
+cat > /etc/otelcol-contrib/config.yaml <<EOF
 # To limit exposure to denial of service attacks, change the host in endpoints below from 0.0.0.0 to a specific network interface.
 # See https://github.com/open-telemetry/opentelemetry-collector/blob/main/docs/security-best-practices.md#safeguards-against-denial-of-service-attacks
 
