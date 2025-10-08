@@ -62,7 +62,7 @@ processors:
         action: insert
       - key: host.id
         value: "gateway"
-        action: upsert  # do not override agent's host.id
+        action: insert  # do not override agent's host.id
 
 exporters:
   debug:
