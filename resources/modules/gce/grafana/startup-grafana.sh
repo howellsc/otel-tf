@@ -3,6 +3,7 @@ set -e
 
 # Update OS
 dnf update -y
+dnf install wget -y
 
 tee /etc/yum.repos.d/grafana.repo <<EOF
 [grafana]
