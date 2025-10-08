@@ -45,9 +45,6 @@ processors:
         value: "e2-medium"
         action: upsert
 
-  resource_to_telemetry:
-      enabled: true
-
 exporters:
   debug:
     verbosity: detailed
@@ -63,17 +60,17 @@ service:
 
     traces:
       receivers: [otlp]
-      processors: [resource, resource_to_telemetry, batch]
+      processors: [resource, batch]
       exporters: [otlphttp]
 
     metrics:
       receivers: [otlp, prometheus]
-      processors: [resource, resource_to_telemetry, batch]
+      processors: [resource, batch]
       exporters: [otlphttp]
 
     logs:
       receivers: [otlp]
-      processors: [resource, resource_to_telemetry, batch]
+      processors: [resource, batch]
       exporters: [debug]
 
   extensions: [health_check]

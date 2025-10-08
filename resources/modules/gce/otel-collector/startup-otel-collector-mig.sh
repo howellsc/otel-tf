@@ -64,9 +64,6 @@ processors:
         value: "gateway"
         action: insert  # do not override agent's host.id
 
-   resource_to_telemetry:
-       enabled: true
-
 exporters:
   debug:
     verbosity: detailed
@@ -77,6 +74,7 @@ exporters:
 
   prometheusremotewrite:
     endpoint: http://prometheus:9090/api/v1/write
+    resource_to_telemetry_conversion: true
 
   otlp:
     endpoint: "tempo:4317"  # Tempo OTLP gRPC endpoint
@@ -89,17 +87,17 @@ service:
 
     traces:
       receivers: [otlp]
-      processors: [resource, resource_to_telemetry, batch]
+      processors: [resource, batch]
       exporters: [otlp]
 
     metrics:
       receivers: [otlp, prometheus]
-      processors: [resource, resource_to_telemetry, batch]
+      processors: [resource, batch]
       exporters: [prometheusremotewrite]
 
     logs:
       receivers: [otlp]
-      processors: [resource,resource_to_telemetry,  batch]
+      processors: [resource, batch]
       exporters: [debug]
 
   extensions: [health_check, pprof, zpages]
