@@ -144,12 +144,20 @@ resource "google_compute_region_url_map" "otel_collector_url_map" {
     name            = "all-paths"
     default_service = google_compute_region_backend_service.otel_collector_backend_service.self_link
   }
+
+  lifecycle {
+    replace_triggered_by = [google_compute_region_backend_service.otel_collector_backend_service]
+  }
 }
 
 resource "google_compute_region_target_http_proxy" "otel_collector_proxy" {
   name    = "otel-collector-http-proxy"
   url_map = google_compute_region_url_map.otel_collector_url_map.self_link
   region  = var.region
+
+  lifecycle {
+    replace_triggered_by = [google_compute_region_url_map.otel_collector_url_map]
+  }
 }
 
 resource "google_compute_forwarding_rule" "otel_collector_forwarding_rule" {
@@ -166,6 +174,10 @@ resource "google_compute_forwarding_rule" "otel_collector_forwarding_rule" {
   depends_on = [
     google_compute_subnetwork.otel_collector_proxy_only
   ]
+
+  lifecycle {
+    replace_triggered_by = [google_compute_subnetwork.otel_collector_proxy_only]
+  }
 }
 
 resource "google_compute_address" "otel_collector_ip" {
