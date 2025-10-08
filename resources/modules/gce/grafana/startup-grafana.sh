@@ -18,3 +18,39 @@ dnf install -y grafana
 
 sudo systemctl enable grafana-server
 sudo systemctl start grafana-server
+
+wget -nv https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v0.136.0/otelcol_0.136.0_linux_amd64.rpm
+rpm -ivh otelcol_0.136.0_linux_amd64.rpm
+
+cat > /etc/otelcol/config.yaml <<EOF
+receivers:
+  prometheus:
+    config:
+      scrape_configs:
+      - job_name: 'otel-collector'
+          scrape_interval: 10s
+          static_configs:
+            - targets: ['0.0.0.0:8888']
+        - job_name: 'grafana'
+          static_configs:
+            - targets: ['localhost:3000']
+
+exporters:
+  otlp:
+    endpoint: otel-collector.natwestmarkets.internal
+    tls:
+      insecure: true
+
+processors:
+  batch:
+
+service:
+  pipelines:
+    metrics:
+      receivers: [prometheus]
+      processors: [batch]
+      exporters: [otlp]
+
+EOF
+
+service otelcol restart

@@ -27,7 +27,7 @@ resource "google_compute_instance_template" "otel_collector_template" {
     scopes = ["https://www.googleapis.com/auth/cloud-platform"]
   }
 
-  metadata_startup_script = file("${path.module}/startup-otel-collector.sh")
+  metadata_startup_script = file("${path.module}/startup-otel-collector-mig.sh")
 
   tags = ["otel-collector", "ssh"]
 }
@@ -43,7 +43,7 @@ resource "google_compute_region_instance_group_manager" "otel_collector_mig" {
   target_size = 3 # Number of backend instances
 
   named_port {
-    name = "http"
+    name = "oltp"
     port = 4318
   }
 
@@ -64,6 +64,15 @@ resource "google_compute_region_instance_group_manager" "otel_collector_mig" {
   depends_on = [google_compute_instance_template.otel_collector_template]
 }
 
+resource "google_compute_instance_from_template" "otel_collector" {
+  name                 = "otel-collector"
+  zone                 = var.zone
+
+  source_instance_template = google_compute_instance_template.otel_collector_template.self_link
+
+  metadata_startup_script = file("${path.module}/startup-otel-collector.sh")
+}
+
 resource "google_compute_region_backend_service" "otel_collector_backend_service" {
   name     = "otel-collector"
   protocol = "HTTP"
@@ -78,7 +87,7 @@ resource "google_compute_region_backend_service" "otel_collector_backend_service
 
   health_checks = [google_compute_region_health_check.otel_collector_health_check.id]
 
-  port_name = "http" # Refer to the named port in the MIG (usually "http" or "https")
+  port_name = "oltp"
 
   depends_on = [
     google_compute_region_instance_group_manager.otel_collector_mig,

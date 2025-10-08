@@ -14,15 +14,22 @@ cat > /etc/otelcol/config.yaml <<EOF
 
 extensions:
   health_check:
+    endpoint: "0.0.0.0:13133"
+  pprof:
+    endpoint: 0.0.0.0:1777
+  zpages:
+    endpoint: 0.0.0.0:55679
 
 receivers:
 
   otlp:
     protocols:
       grpc:
+        endpoint: 0.0.0.0:4317
       http:
+        endpoint: 0.0.0.0:4318
 
-  # Collect own metrics
+  # Collect own metrics and Grafana
   prometheus:
     config:
       scrape_configs:
@@ -31,24 +38,45 @@ receivers:
         static_configs:
           - targets: ['0.0.0.0:8888']
 
+#  jaeger:
+#    protocols:
+#      grpc:
+#        endpoint: 0.0.0.0:14250
+#      thrift_binary:
+#        endpoint: 0.0.0.0:6832
+#      thrift_compact:
+#        endpoint: 0.0.0.0:6831
+#      thrift_http:
+#        endpoint: 0.0.0.0:14268
+#
+#  zipkin:
+#    endpoint: 0.0.0.0:9411
+
 processors:
   batch:
 
   resource:
     attributes:
-      - key: host.zone
-        value: "us-central1-a"
+      - key: deployment.environment
+        value: "production"
         action: upsert
-      - key: host.instance_type
-        value: "e2-medium"
-        action: upsert
+      - key: host.id
+        value: "gateway"
+        action: insert  # do not override agent's host.id
 
 exporters:
   debug:
     verbosity: detailed
 
+  prometheus:
+    endpoint: 0.0.0.0:8889
+    namespace: default
+
+  prometheusremotewrite:
+    endpoint: http://prometheus:9090/api/v1/write
+
   otlp:
-    endpoint: "otel-collector.natwestmarkets.internal"
+    endpoint: "tempo:4317"  # Tempo OTLP gRPC endpoint
     tls:
       insecure: true  # Use insecure if Tempo does not use TLS
 
@@ -64,14 +92,14 @@ service:
     metrics:
       receivers: [otlp, prometheus]
       processors: [resource, batch]
-      exporters: [otlp]
+      exporters: [prometheusremotewrite]
 
     logs:
       receivers: [otlp]
       processors: [resource, batch]
       exporters: [debug]
 
-  extensions: [health_check]
+  extensions: [health_check, pprof, zpages]
 EOF
 
 service otelcol restart

@@ -77,6 +77,7 @@ module "otel_collector_gce" {
   source = "./modules/gce/otel-collector"
 
   region        = var.region
+  zone          = var.zone
   machine_image = var.machine_image
   machine_type  = var.machine_type
   disk_size_gb  = var.disk_size_gb
