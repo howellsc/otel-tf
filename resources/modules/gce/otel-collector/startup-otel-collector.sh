@@ -79,4 +79,4 @@ service:
   extensions: [health_check]
 EOF
 
-service otelcol restart
+service otelcol-contrib restart

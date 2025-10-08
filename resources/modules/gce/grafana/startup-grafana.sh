@@ -53,4 +53,4 @@ service:
 
 EOF
 
-service otelcol restart
+service otelcol-contrib restart

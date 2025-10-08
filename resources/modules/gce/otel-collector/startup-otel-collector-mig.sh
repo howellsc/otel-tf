@@ -105,4 +105,4 @@ service:
   extensions: [health_check, pprof, zpages]
 EOF
 
-service otelcol restart
+service otelcol-contrib restart
