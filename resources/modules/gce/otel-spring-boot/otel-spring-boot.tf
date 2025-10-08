@@ -19,7 +19,7 @@ resource "google_compute_instance" "ubuntu_vm" {
     scopes = ["https://www.googleapis.com/auth/cloud-platform"]
   }
 
-  metadata_startup_script = file("${path.module}/startup-otel-spring-boot.sh")
+  metadata_startup_script = file("${path.module}/scripts/startup-otel-spring-boot.sh")
 
   tags = ["otel-spring-boot", "ssh"]
 }

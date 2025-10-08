@@ -27,7 +27,7 @@ resource "google_compute_instance_template" "otel_collector_template" {
     scopes = ["https://www.googleapis.com/auth/cloud-platform"]
   }
 
-  metadata_startup_script = file("${path.module}/startup-otel-collector-mig.sh")
+  metadata_startup_script = file("${path.module}/scripts/startup-otel-collector-mig.sh")
 
   tags = ["otel-collector", "ssh"]
 }
@@ -70,7 +70,7 @@ resource "google_compute_instance_from_template" "otel_collector" {
 
   source_instance_template = google_compute_instance_template.otel_collector_template.self_link
 
-  metadata_startup_script = file("${path.module}/startup-otel-collector.sh")
+  metadata_startup_script = file("${path.module}/scripts/startup-otel-collector.sh")
 
   lifecycle {
     replace_triggered_by = [google_compute_instance_template.otel_collector_template]

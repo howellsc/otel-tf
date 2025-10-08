@@ -19,7 +19,7 @@ resource "google_compute_instance" "prometheus" {
     scopes = ["https://www.googleapis.com/auth/cloud-platform"]
   }
 
-  metadata_startup_script = file("${path.module}/startup-prometheus.sh")
+  metadata_startup_script = file("${path.module}/scripts/startup-prometheus.sh")
 
   tags = ["prometheus", "ssh"]
 }
