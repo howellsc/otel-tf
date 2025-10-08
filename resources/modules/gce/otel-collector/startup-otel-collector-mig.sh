@@ -5,7 +5,7 @@ set -e
 dnf update -y
 
 dnf install wget -y
-wget -nv https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v0.136.0/otelcol_0.136.0_linux_amd64.rpm
+wget -nv https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v0.136.0/otelcol-contrib_0.136.0_linux_amd64.rpm
 rpm -ivh otelcol_0.136.0_linux_amd64.rpm
 
 cat > /etc/otelcol/config.yaml <<EOF
@@ -64,6 +64,9 @@ processors:
         value: "gateway"
         action: insert  # do not override agent's host.id
 
+   resource_to_telemetry:
+       enabled: true
+
 exporters:
   debug:
     verbosity: detailed
@@ -86,17 +89,17 @@ service:
 
     traces:
       receivers: [otlp]
-      processors: [resource, batch]
+      processors: [resource, resource_to_telemetry, batch]
       exporters: [otlp]
 
     metrics:
       receivers: [otlp, prometheus]
-      processors: [resource, batch]
+      processors: [resource, resource_to_telemetry, batch]
       exporters: [prometheusremotewrite]
 
     logs:
       receivers: [otlp]
-      processors: [resource, batch]
+      processors: [resource,resource_to_telemetry,  batch]
       exporters: [debug]
 
   extensions: [health_check, pprof, zpages]
