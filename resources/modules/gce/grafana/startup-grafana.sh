@@ -37,7 +37,7 @@ receivers:
 
 exporters:
   otlp:
-    endpoint: otel-collector.natwestmarkets.internal
+    endpoint: otel-collector.natwestmarkets.internal:4318
     tls:
       insecure: true
 
