@@ -74,7 +74,8 @@ exporters:
 
   prometheusremotewrite:
     endpoint: http://prometheus:9090/api/v1/write
-    resource_to_telemetry_conversion: true
+    resource_to_telemetry_conversion:
+      enabled: true
 
   otlp:
     endpoint: "tempo:4317"  # Tempo OTLP gRPC endpoint
