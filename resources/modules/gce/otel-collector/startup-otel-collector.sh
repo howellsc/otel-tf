@@ -49,8 +49,8 @@ exporters:
   debug:
     verbosity: detailed
 
-  otlp:
-    endpoint: "otel-collector.natwestmarkets.internal:80"
+  otlphttp:
+    endpoint: "http://otel-collector.natwestmarkets.internal:80"
     tls:
       insecure: true  # Use insecure if Tempo does not use TLS
 
@@ -61,12 +61,12 @@ service:
     traces:
       receivers: [otlp]
       processors: [resource, batch]
-      exporters: [otlp]
+      exporters: [otlphttp]
 
     metrics:
       receivers: [otlp, prometheus]
       processors: [resource, batch]
-      exporters: [otlp]
+      exporters: [otlphttp]
 
     logs:
       receivers: [otlp]
