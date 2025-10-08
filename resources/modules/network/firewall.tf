@@ -56,6 +56,22 @@ resource "google_compute_firewall" "otel_collector_prometheus" {
   source_ranges = ["0.0.0.0/0"]
 }
 
+resource "google_compute_firewall" "otel_collector_otel_collector_mig" {
+  name    = "otel-collector-otel-collector-mig"
+  network = google_compute_network.otel_net.name
+
+  direction = "EGRESS"
+
+  allow {
+    protocol = "tcp"
+    ports    = ["80"]
+  }
+
+  target_tags = ["otel-collector"]
+
+  source_ranges = ["0.0.0.0/0"]
+}
+
 resource "google_compute_firewall" "otel_collector_tempo" {
   name    = "otel-collector-tempo"
   network = google_compute_network.otel_net.name
