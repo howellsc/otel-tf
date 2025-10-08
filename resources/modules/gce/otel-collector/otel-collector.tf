@@ -95,6 +95,10 @@ resource "google_compute_region_backend_service" "otel_collector_backend_service
 
   port_name = "oltp"
 
+  lifecycle {
+    replace_triggered_by = [google_compute_region_instance_group_manager.otel_collector_mig]
+  }
+
   depends_on = [
     google_compute_region_instance_group_manager.otel_collector_mig,
     google_compute_region_health_check.otel_collector_health_check
