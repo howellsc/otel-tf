@@ -48,7 +48,7 @@ exporters:
     verbosity: detailed
 
   otlp:
-    endpoint: "otel-collector.natwestmarkets.internal"
+    endpoint: "otel-collector.natwestmarkets.internal:80"
     tls:
       insecure: true  # Use insecure if Tempo does not use TLS
 
