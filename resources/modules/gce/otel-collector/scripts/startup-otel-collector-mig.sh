@@ -59,7 +59,7 @@ processors:
     attributes:
       - key: deployment.environment
         value: "production"
-        action: upsert
+        action: insert
       - key: host.id
         value: "gateway"
         action: upsert  # do not override agent's host.id
