@@ -38,12 +38,18 @@ processors:
 
   resource:
     attributes:
+      - key: deployment.environment
+        value: "dev"
+        action: insert
       - key: host.zone
-        value: "us-central1-a"
-        action: upsert
+        value: "europe-north1-a"
+        action: insert
       - key: host.instance_type
         value: "e2-medium"
-        action: upsert
+        action: insert
+      - key: host.id
+        value: "agent"
+        action: insert
 
 exporters:
   debug:
