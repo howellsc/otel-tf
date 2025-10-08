@@ -65,12 +65,18 @@ resource "google_compute_region_instance_group_manager" "otel_collector_mig" {
 }
 
 resource "google_compute_instance_from_template" "otel_collector" {
-  name                 = "otel-collector"
-  zone                 = var.zone
+  name = "otel-collector"
+  zone = var.zone
 
   source_instance_template = google_compute_instance_template.otel_collector_template.self_link
 
   metadata_startup_script = file("${path.module}/startup-otel-collector.sh")
+
+  lifecycle {
+    replace_triggered_by = [google_compute_instance_template.otel_collector_template]
+  }
+
+  depends_on = [google_compute_instance_template.otel_collector_template]
 }
 
 resource "google_compute_region_backend_service" "otel_collector_backend_service" {
