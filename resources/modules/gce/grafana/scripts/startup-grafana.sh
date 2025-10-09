@@ -45,11 +45,16 @@ exporters:
 processors:
   batch:
 
+  resourcedetection/gcp:
+    detectors: [env, gcp]
+    timeout: 2s
+    override: false
+
 service:
   pipelines:
     metrics:
       receivers: [prometheus]
-      processors: [batch]
+      processors: [resourcedetection/gcp, batch]
       exporters: [otlphttp]
 
 EOF
