@@ -61,10 +61,6 @@ processors:
     override: false
 
   resource:
-    resourcedetection:
-      detectors: [gce]
-      timeout: 2s
-      override: false
     attributes:
       - key: deployment.environment
         value: "production"
