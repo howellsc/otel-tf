@@ -40,7 +40,7 @@ resource "google_compute_region_instance_group_manager" "otel_collector_mig" {
   version {
     instance_template = google_compute_instance_template.otel_collector_template.id
   }
-  target_size = 5 # Number of backend instances
+  target_size = 3 # Number of backend instances
 
   named_port {
     name = "oltp"
