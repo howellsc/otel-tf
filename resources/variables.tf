@@ -29,5 +29,6 @@ variable "disk_size_gb" {
 
 variable "machine_image" {
   description = "GCE machine image to use"
-  default     = "rocky-linux-cloud/rocky-linux-9"
+  default     = "projects/ritm4225265/global/images/rock9-updated"
+  # default     = "rocky-linux-cloud/rocky-linux-9"
 }
