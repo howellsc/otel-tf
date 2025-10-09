@@ -1,5 +1,7 @@
 resource "google_compute_instance" "ubuntu_vm" {
-  name         = "otel-spring-boot"
+  count = 5
+
+  name         = "otel-spring-boot-${count.index}"
   machine_type = var.machine_type
   zone         = var.zone
 
