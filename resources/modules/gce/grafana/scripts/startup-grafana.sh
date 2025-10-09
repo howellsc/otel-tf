@@ -23,7 +23,7 @@ sudo systemctl start grafana-server
 wget -nv https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v0.136.0/otelcol-contrib_0.136.0_linux_amd64.rpm
 rpm -ivh otelcol-contrib_0.136.0_linux_amd64.rpm
 
-cat > /etc/otelcol/config-contrib.yaml <<EOF
+cat > /etc/otelcol/config.yaml <<EOF
 receivers:
   prometheus:
     config:
