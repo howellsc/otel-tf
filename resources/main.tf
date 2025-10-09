@@ -55,7 +55,7 @@ module "otel_spring_boot_gce" {
   source = "./modules/gce/otel-spring-boot"
 
   zone          = var.zone
-  machine_image = var.machine_image
+  machine_image = var.podman_machine_image
   machine_type  = var.machine_type
   disk_size_gb  = var.disk_size_gb
   vpc_subnet_id = module.vcp.vpc_subnet

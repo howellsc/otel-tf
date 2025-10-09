@@ -1,5 +1,5 @@
-resource "google_compute_instance" "ubuntu_vm" {
-  count = 5
+resource "google_compute_instance" "spring_boot_vm" {
+  count = 3
 
   name         = "otel-spring-boot-${count.index}"
   machine_type = var.machine_type

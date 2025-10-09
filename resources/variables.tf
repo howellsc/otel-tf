@@ -32,3 +32,9 @@ variable "machine_image" {
   default     = "projects/ritm4225265/global/images/rock9-updated"
   # default     = "rocky-linux-cloud/rocky-linux-9"
 }
+
+variable "podman_machine_image" {
+  description = "GCE machine image to use"
+  default     = "projects/ritm4225265/global/images/rocky9-updated-podman"
+  # default     = "rocky-linux-cloud/rocky-linux-9"
+}
