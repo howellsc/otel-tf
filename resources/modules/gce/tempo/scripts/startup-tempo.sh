@@ -4,8 +4,7 @@ set -e
 dnf update -y
 dnf install wget -y
 
-curl -Lo tempo_2.8.2_linux_amd64.rpm https://github.com/grafana/tempo/releases/download/v2.8.2/tempo_2.8.2_linux_amd64.rpm
-
+wget -nv https://github.com/grafana/tempo/releases/download/v2.8.2/tempo_2.8.2_linux_amd64.rpm
 dnf install tempo_2.8.2_linux_amd64.rpm -y
 
 cat > /etc/tempo/config.yml <<EOF

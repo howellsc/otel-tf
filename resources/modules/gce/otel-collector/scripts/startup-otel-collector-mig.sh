@@ -56,6 +56,10 @@ processors:
   batch:
 
   resource:
+    resourcedetection:
+      detectors: [gce]
+      timeout: 2s
+      override: false
     attributes:
       - key: deployment.environment
         value: "production"
@@ -93,7 +97,7 @@ service:
 
     metrics:
       receivers: [otlp, prometheus]
-      processors: [resource, batch]
+      processors: [resource, resourcedetection, batch]
       exporters: [prometheusremotewrite]
 
     logs:
