@@ -95,9 +95,9 @@ resource "google_compute_region_backend_service" "otel_collector_backend_service
 
   port_name = "oltp"
 
-  lifecycle {
-    replace_triggered_by = [google_compute_region_instance_group_manager.otel_collector_mig]
-  }
+  # lifecycle {
+  #   replace_triggered_by = [google_compute_region_instance_group_manager.otel_collector_mig]
+  # }
 
   depends_on = [
     google_compute_region_instance_group_manager.otel_collector_mig,
@@ -145,9 +145,9 @@ resource "google_compute_region_url_map" "otel_collector_url_map" {
     default_service = google_compute_region_backend_service.otel_collector_backend_service.self_link
   }
 
-  lifecycle {
-    replace_triggered_by = [google_compute_region_backend_service.otel_collector_backend_service]
-  }
+  # lifecycle {
+  #   replace_triggered_by = [google_compute_region_backend_service.otel_collector_backend_service]
+  # }
 }
 
 resource "google_compute_region_target_http_proxy" "otel_collector_proxy" {
@@ -155,9 +155,9 @@ resource "google_compute_region_target_http_proxy" "otel_collector_proxy" {
   url_map = google_compute_region_url_map.otel_collector_url_map.self_link
   region  = var.region
 
-  lifecycle {
-    replace_triggered_by = [google_compute_region_url_map.otel_collector_url_map]
-  }
+  # lifecycle {
+  #   replace_triggered_by = [google_compute_region_url_map.otel_collector_url_map]
+  # }
 }
 
 resource "google_compute_forwarding_rule" "otel_collector_forwarding_rule" {
