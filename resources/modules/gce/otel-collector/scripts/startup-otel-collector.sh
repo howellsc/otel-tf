@@ -36,11 +36,12 @@ receivers:
 processors:
   batch:
 
+  resourcedetection/gcp:
+    detectors: [env, gcp]
+    timeout: 2s
+    override: false
+
   resource:
-    resourcedetection:
-      detectors: [gce]
-      timeout: 2s
-      override: false
     attributes:
       - key: deployment.environment
         value: "dev"
@@ -75,7 +76,7 @@ service:
 
     metrics:
       receivers: [otlp, prometheus]
-      processors: [resource, resourcedetection, batch]
+      processors: [resource, resourcedetection/gcp, batch]
       exporters: [otlphttp]
 
     logs:
