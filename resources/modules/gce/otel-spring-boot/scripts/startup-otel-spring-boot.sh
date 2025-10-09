@@ -26,4 +26,4 @@ podman rm $CONTAINER_NAME || true
 podman pull $REGISTRY/$IMAGE
 
 # Run docker container
-podman run -d --network=host --name $CONTAINER_NAME $IMAGE
+podman run -e INSTANCE_HOSTNAME=$(hostname) -d --network=host --name $CONTAINER_NAME $IMAGE
