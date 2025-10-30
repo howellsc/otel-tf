@@ -45,6 +45,11 @@ rule_files:
 # A scrape configuration containing exactly one endpoint to scrape:
 # Here it's Prometheus itself.
 scrape_configs:
+  - job_name: prometheus-node
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['localhost:9100']
+
 #  - job_name: 'otel-collector'
 #    scrape_interval: 10s
 #    static_configs:
@@ -89,3 +94,8 @@ EOF
 systemctl daemon-reload
 systemctl start prometheus
 systemctl enable prometheus
+
+wget https://github.com/prometheus/node_exporter/releases/download/v1.10.2/node_exporter-1.10.2.linux-amd64.tar.gz
+tar xvfz node_exporter-*.*-amd64.tar.gz
+cd node_exporter-*.*-amd64
+./node_exporter &
